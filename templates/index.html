@@ -473,7 +473,7 @@
                                 </div>
                             </div>
                         </div>
-                        <a href="/download/{{ note.filename }}" class="note-download-btn" download>
+                        <a href="{{ note.download_url }}" class="note-download-btn" download="{{ note.filename }}">
                             <i class="fa-solid fa-download"></i>
                             Download
                         </a>
