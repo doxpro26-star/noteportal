@@ -1,11 +1,13 @@
-from flask import Flask, render_template, url_for
+from flask import Flask, render_template, send_from_directory, abort
+from urllib.parse import quote
 import os
 
 app = Flask(__name__)
 
-NOTES_FOLDER = os.path.join(os.path.dirname(__file__), "static", "notes")
+NOTES_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), "static", "notes")
 
 ALLOWED_EXTENSIONS = {".pdf", ".docx", ".doc", ".pptx", ".txt", ".zip"}
+
 
 def get_notes():
     """Scan the static/notes/ folder and return a list of files."""
@@ -42,8 +44,8 @@ def get_notes():
             "ext": ext.upper().lstrip("."),
             "size": size_str,
             "icon": icon,
-            # Direct static URL — works on both local and Vercel
-            "download_url": f"/static/notes/{filename}",
+            # URL-encode filename so spaces/brackets don't break the URL
+            "download_url": "/dl/" + quote(filename),
         })
 
     return notes
@@ -53,6 +55,16 @@ def get_notes():
 def index():
     notes = get_notes()
     return render_template("index.html", notes=notes)
+
+
+@app.route("/dl/<path:filename>")
+def download(filename):
+    """Serve the file as a download attachment."""
+    safe_name = os.path.basename(filename)
+    file_path = os.path.join(NOTES_FOLDER, safe_name)
+    if not os.path.isfile(file_path):
+        abort(404)
+    return send_from_directory(NOTES_FOLDER, safe_name, as_attachment=True)
 
 
 if __name__ == "__main__":
