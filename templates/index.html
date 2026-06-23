@@ -316,6 +316,31 @@
             letter-spacing: 0.5px;
         }
 
+        /* Download counter */
+        .note-counter {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+        .note-counter i { color: var(--yellow); font-size: 0.75rem; }
+        .note-counter .count-num {
+            font-weight: 700;
+            color: var(--text);
+            font-variant-numeric: tabular-nums;
+        }
+        /* Pulse when count is > 0 */
+        .note-counter.has-downloads {
+            border-color: rgba(252,194,6,0.2);
+            background: rgba(252,194,6,0.04);
+        }
+        .note-counter.has-downloads .count-num { color: var(--yellow); }
+
         .note-download-btn {
             display: flex;
             align-items: center;
@@ -336,6 +361,12 @@
             background: var(--yellow);
             color: #111;
             border-color: var(--yellow);
+        }
+        /* Briefly flash green after click */
+        .note-download-btn.clicked {
+            background: #34D399;
+            border-color: #34D399;
+            color: #111;
         }
 
         /* Empty state */
@@ -473,7 +504,18 @@
                                 </div>
                             </div>
                         </div>
-                        <a href="{{ note.download_url }}" class="note-download-btn" download="{{ note.filename }}">
+
+                        <!-- Download counter badge -->
+                        <div class="note-counter {% if note.downloads > 0 %}has-downloads{% endif %}">
+                            <i class="fa-solid fa-download"></i>
+                            <span class="count-num" data-count="{{ note.downloads }}">{{ note.downloads }}</span>
+                            <span>download{{ 's' if note.downloads != 1 else '' }}</span>
+                        </div>
+
+                        <a href="{{ note.download_url }}"
+                           class="note-download-btn"
+                           download="{{ note.filename }}"
+                           onclick="handleDownload(this)">
                             <i class="fa-solid fa-download"></i>
                             Download
                         </a>
@@ -493,8 +535,41 @@
 
     <!-- FOOTER -->
     <footer class="footer">
-        <p>Made with <span>♥</span> for Python students &nbsp;·&nbsp; Add files to <code style="background:rgba(252,194,6,0.1);color:var(--yellow);padding:1px 6px;border-radius:4px;">notes/</code> folder to update the portal</p>
+        <p>Made with <span>♥</span> for Python students &nbsp;·&nbsp; Add files to <code style="background:rgba(252,194,6,0.1);color:var(--yellow);padding:1px 6px;border-radius:4px;">static/notes/</code> folder to update the portal</p>
     </footer>
+
+    <script>
+        // Animate count numbers from 0 to actual value on page load
+        document.querySelectorAll('.count-num').forEach(el => {
+            const target = parseInt(el.dataset.count, 10);
+            if (target === 0) return;
+            let current = 0;
+            const step = Math.ceil(target / 30);
+            const timer = setInterval(() => {
+                current = Math.min(current + step, target);
+                el.textContent = current;
+                if (current >= target) clearInterval(timer);
+            }, 30);
+        });
+
+        // Flash the button green briefly after click
+        function handleDownload(btn) {
+            btn.classList.add('clicked');
+            btn.innerHTML = '<i class="fa-solid fa-check"></i> Downloading…';
+            // After 2s reset the button (page may not navigate away for docx)
+            setTimeout(() => {
+                btn.classList.remove('clicked');
+                btn.innerHTML = '<i class="fa-solid fa-download"></i> Download';
+                // Bump the counter display by 1
+                const counter = btn.closest('.note-card').querySelector('.count-num');
+                if (counter) {
+                    const newVal = parseInt(counter.textContent, 10) + 1;
+                    counter.textContent = newVal;
+                    counter.closest('.note-counter').classList.add('has-downloads');
+                }
+            }, 2000);
+        }
+    </script>
 
 </body>
 </html>

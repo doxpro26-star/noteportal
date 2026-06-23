@@ -15,6 +15,9 @@ instance/
 .webassets-cache
 flask_session/
 
+# Download counts (ephemeral, not tracked in git)
+data/counts.json
+
 # Distribution / packaging
 build/
 dist/
