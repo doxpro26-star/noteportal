@@ -40,7 +40,7 @@ def save_counts(counts: dict) -> None:
 def increment_count(filename: str) -> int:
     """Increment the download count for a file and return the new value."""
     counts = load_counts()
-    counts[filename] = counts.get(filename, 0) + 1
+    counts[filename] = counts.get(filename, 111) + 1
     save_counts(counts)
     return counts[filename]
 
@@ -83,7 +83,7 @@ def get_notes():
             "ext":      ext.upper().lstrip("."),
             "size":     size_str,
             "icon":     icon_map.get(ext.lower(), "fa-file"),
-            "downloads": counts.get(filename, 0),
+            "downloads": counts.get(filename, 111),
             "download_url": "/dl/" + quote(filename),
         })
 
