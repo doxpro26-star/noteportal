@@ -122,6 +122,10 @@ def view(filename):
     if not os.path.isfile(file_path):
         abort(404)
 
+    ext = os.path.splitext(safe_name)[1].lower()
+    if ext in [".docx", ".doc"]:
+        return render_template("view_docx.html", filename=safe_name, file_url="/dl/" + quote(safe_name))
+
     return send_from_directory(NOTES_FOLDER, safe_name, as_attachment=False)
 
 
