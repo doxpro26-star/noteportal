@@ -23,13 +23,14 @@
             top: 0;
             z-index: 100;
         }
-        .toolbar h1 { margin: 0; font-size: 1.2rem; color: #1A1A2E; }
+        .toolbar h1 { margin: 0; font-size: 1.2rem; color: #1A1A2E; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .back-btn {
             display: inline-flex; align-items: center; gap: 8px;
             background: #1A1A2E; color: #fff;
             padding: 8px 16px; border-radius: 8px;
             text-decoration: none; font-size: 0.9rem; font-weight: 600;
             transition: all 0.2s ease;
+            white-space: nowrap;
         }
         .back-btn:hover { background: #FCC206; color: #111; }
         #document-container {
@@ -57,12 +58,37 @@
         /* Overrides for docx-preview if needed */
         .docx-wrapper { background: transparent !important; padding: 0 !important; }
         .docx { box-shadow: none !important; margin-bottom: 0 !important; }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .toolbar {
+                padding: 12px 15px;
+            }
+            .toolbar h1 {
+                font-size: 1rem;
+                max-width: 60%;
+            }
+            .back-btn {
+                padding: 6px 12px;
+                font-size: 0.8rem;
+            }
+            #document-container {
+                margin: 15px;
+                padding: 15px;
+                min-height: calc(100vh - 100px);
+                border-radius: 8px;
+            }
+            .loading {
+                padding: 50px 20px;
+                font-size: 1rem;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="toolbar">
         <h1><i class="fa-solid fa-file-word" style="color: #2b579a; margin-right: 8px;"></i> {{ filename }}</h1>
-        <a href="/" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Back to Portal</a>
+        <a href="/" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Back</a>
     </div>
 
     <div id="document-container">
@@ -79,10 +105,14 @@
             .then(blob => {
                 const container = document.getElementById("document-container");
                 container.innerHTML = ""; // Clear loading
+                
+                // On small screens, ignore width so the content wraps and prevents horizontal scroll
+                const isMobile = window.innerWidth <= 768;
+
                 docx.renderAsync(blob, container, null, {
                     className: "docx",
                     inWrapper: true,
-                    ignoreWidth: false,
+                    ignoreWidth: isMobile,
                     ignoreHeight: false,
                     ignoreFonts: false,
                     breakPages: true,
