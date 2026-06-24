@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>View Document - {{ filename }}</title>
     <!-- JSZip is required by docx-preview -->
     <script src="https://unpkg.com/jszip/dist/jszip.min.js"></script>
@@ -10,7 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-        body { font-family: 'Inter', sans-serif; background: #F5F6FA; margin: 0; padding: 0; overflow-x: hidden; }
+        body { font-family: 'Inter', sans-serif; background: #F5F6FA; margin: 0; padding: 0; }
         .toolbar {
             background: #fff;
             padding: 15px 24px;
@@ -58,7 +58,7 @@
         }
         .loading i { font-size: 2.5rem; color: #FCC206; }
         
-        /* Overrides for docx-preview to ensure it fits */
+        /* Overrides for docx-preview */
         .docx-wrapper { 
             background: transparent !important; 
             padding: 0 !important; 
@@ -66,25 +66,6 @@
         .docx { 
             box-shadow: none !important; 
             margin-bottom: 0 !important;
-            padding: 0 !important;
-            min-height: auto !important;
-        }
-        
-        /* Force responsive images and wrap text */
-        .docx img {
-            max-width: 100% !important;
-            height: auto !important;
-        }
-        .docx p, .docx span {
-            word-wrap: break-word !important;
-            overflow-wrap: break-word !important;
-        }
-        /* Make docx tables scrollable if they are too wide */
-        .docx table {
-            max-width: 100% !important;
-            display: block;
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
         }
 
         /* Mobile Responsiveness */
@@ -102,14 +83,14 @@
             }
             #document-container {
                 margin: 10px;
-                padding: 15px;
-                min-height: calc(100vh - 100px);
+                padding: 10px;
+                min-height: calc(100vh - 80px);
                 border-radius: 8px;
                 width: calc(100% - 20px);
             }
-            .loading {
-                padding: 50px 20px;
-                font-size: 1rem;
+            .docx-wrapper {
+                align-items: flex-start !important; /* Prevents the left side from being cut off */
+                padding: 0 !important;
             }
         }
     </style>
@@ -135,19 +116,38 @@
                 const container = document.getElementById("document-container");
                 container.innerHTML = ""; // Clear loading
                 
-                // On small screens, ignore width so the content wraps and prevents horizontal scroll
-                const isMobile = window.innerWidth <= 768;
-
                 docx.renderAsync(blob, container, null, {
                     className: "docx",
                     inWrapper: true,
-                    ignoreWidth: isMobile,
-                    ignoreHeight: isMobile,
+                    ignoreWidth: false, // Don't strip widths, preserve the exact layout
+                    ignoreHeight: false,
                     ignoreFonts: false,
                     breakPages: true,
                     ignoreLastRenderedPageBreak: true,
                     experimental: true
-                }).then(x => console.log("docx: finished"));
+                }).then(x => {
+                    // Mobile scaling logic
+                    const isMobile = window.innerWidth <= 768;
+                    if (isMobile) {
+                        const docxElements = document.querySelectorAll('.docx');
+                        docxElements.forEach(el => {
+                            // Target screen width minus some padding (10px margin * 2)
+                            const screenWidth = window.innerWidth - 20; 
+                            const docWidth = el.offsetWidth || 816; // Fallback to approx A4 pt size
+                            
+                            // If the document is wider than the screen, zoom out to fit perfectly
+                            if (docWidth > screenWidth) {
+                                const scale = screenWidth / docWidth;
+                                el.style.zoom = scale;
+                                
+                                // Fallback for older browsers that don't support zoom well
+                                el.style.transformOrigin = "top left";
+                                // Don't apply transform if zoom worked (most modern browsers)
+                                // zoom is standard enough now for this use case.
+                            }
+                        });
+                    }
+                });
             })
             .catch(err => {
                 document.getElementById("document-container").innerHTML = `<div class="loading" style="color:red;"><i class="fa-solid fa-circle-exclamation"></i> Error loading document: ${err.message}</div>`;
