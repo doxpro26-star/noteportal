@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exam Portal - DoxPro Robotics UI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --yellow: #FCC206;
+            --black: #1A1A1A;
+            --gray-dark: #2E343B;
+            --white: #FFFFFF;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+        body {
+            background: radial-gradient(ellipse at 50% 0%, #2a2a3e 0%, #1a1a1a 50%, #0a0a0a 100%);
+            color: var(--white);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            position: relative;
+            overflow-x: hidden;
+        }
+        /* Tech Grid Pattern */
+        body::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                linear-gradient(rgba(252, 194, 6, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(252, 194, 6, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: -1;
+            opacity: 0.5;
+        }
+        .container {
+            max-width: 800px;
+            width: 100%;
+            z-index: 2;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        .title-line {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 900;
+            line-height: 1.2;
+            color: var(--white);
+            text-shadow: 0 2px 20px rgba(255, 255, 255, 0.1);
+            position: relative;
+            display: inline-block;
+        }
+        .title-line.highlight {
+            background: linear-gradient(135deg, #fcc206 0%, #ffdd44 50%, #fcc206 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0 0 20px rgba(252, 194, 6, 0.4));
+        }
+        .exam-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(252, 194, 6, 0.2);
+            border-radius: 16px;
+            padding: 2.5rem;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3), inset 0 0 20px rgba(252, 194, 6, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+        .exam-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, var(--yellow), transparent);
+        }
+        .question-number {
+            color: var(--yellow);
+            font-weight: 700;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 1rem;
+            display: block;
+        }
+        .question-text {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            color: var(--white);
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 2.5rem;
+        }
+        .option-label {
+            display: flex;
+            align-items: center;
+            padding: 1.25rem 1.5rem;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        .option-label:hover {
+            background: rgba(252, 194, 6, 0.1);
+            border-color: rgba(252, 194, 6, 0.3);
+            transform: translateX(5px);
+        }
+        .option-label input[type="radio"] {
+            display: none;
+        }
+        .option-label .radio-custom {
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            margin-right: 1.5rem;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+        .option-label input[type="radio"]:checked + .radio-custom {
+            border-color: var(--yellow);
+        }
+        .option-label input[type="radio"]:checked + .radio-custom::after {
+            content: '';
+            width: 10px;
+            height: 10px;
+            background: var(--yellow);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--yellow);
+        }
+        .option-label.selected {
+            background: rgba(252, 194, 6, 0.15);
+            border-color: var(--yellow);
+        }
+        .actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.7rem;
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.05rem;
+            transition: all 0.4s ease;
+            cursor: pointer;
+            border: none;
+            outline: none;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #fcc206 0%, #ffdd44 100%);
+            color: var(--black);
+            box-shadow: 0 10px 30px rgba(252, 194, 6, 0.4);
+            margin-left: auto;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(252, 194, 6, 0.5);
+        }
+        .btn-primary:disabled {
+            background: rgba(255, 255, 255, 0.2);
+            color: rgba(255, 255, 255, 0.5);
+            box-shadow: none;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.03);
+            color: var(--white);
+            border: 2px solid rgba(252, 194, 6, 0.3);
+            backdrop-filter: blur(10px);
+        }
+        .btn-secondary:hover:not(:disabled) {
+            background: rgba(252, 194, 6, 0.1);
+            border-color: var(--yellow);
+            color: var(--yellow);
+        }
+        .btn-secondary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        #result-screen {
+            display: none;
+            text-align: center;
+        }
+        .score-display {
+            font-size: clamp(3rem, 6vw, 5rem);
+            font-weight: 900;
+            color: var(--yellow);
+            margin-bottom: 1rem;
+            text-shadow: 0 0 30px rgba(252, 194, 6, 0.5);
+            font-variant-numeric: tabular-nums;
+        }
+        .score-message {
+            font-size: 1.25rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 2.5rem;
+        }
+        .nav-link {
+            color: var(--white);
+            text-decoration: none;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 2rem;
+            opacity: 0.7;
+            transition: all 0.3s ease;
+        }
+        .nav-link:hover {
+            opacity: 1;
+            color: var(--yellow);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header">
+            <h1 class="title-line">EXTC/EE <span class="title-line highlight">Exam Portal</span></h1>
+        </div>
+
+        <div class="exam-card" id="quiz-container">
+            <span class="question-number" id="question-counter">Question 1 of 5</span>
+            <h2 class="question-text" id="question-text">Loading question...</h2>
+            
+            <div class="options" id="options-container">
+                <!-- Options will be injected here via JS -->
+            </div>
+
+            <div class="actions">
+                <button class="btn btn-secondary" id="btn-prev" disabled>Previous</button>
+                <button class="btn btn-primary" id="btn-next">Next <i class="fa-solid fa-arrow-right"></i></button>
+            </div>
+        </div>
+
+        <div class="exam-card" id="result-screen">
+            <span class="question-number">Exam Completed</span>
+            <div class="score-display" id="final-score">0/0</div>
+            <p class="score-message" id="score-message">Good effort!</p>
+            <button class="btn btn-primary" onclick="location.reload()">Take Exam Again <i class="fa-solid fa-rotate-right"></i></button>
+            <br>
+            <a href="/" class="nav-link"><i class="fa-solid fa-house"></i> Return to Note Portal</a>
+        </div>
+    </div>
+
+    <script>
+        const questionsData = {{ questions|tojson }};
+        let currentIndex = 0;
+        let userAnswers = new Array(questionsData.length).fill(null);
+
+        const questionCounterEl = document.getElementById('question-counter');
+        const questionTextEl = document.getElementById('question-text');
+        const optionsContainerEl = document.getElementById('options-container');
+        const btnPrev = document.getElementById('btn-prev');
+        const btnNext = document.getElementById('btn-next');
+        const quizContainer = document.getElementById('quiz-container');
+        const resultScreen = document.getElementById('result-screen');
+        const finalScoreEl = document.getElementById('final-score');
+        const scoreMessageEl = document.getElementById('score-message');
+
+        function renderQuestion() {
+            if (!questionsData || questionsData.length === 0) {
+                questionTextEl.textContent = "No questions available.";
+                return;
+            }
+
+            const q = questionsData[currentIndex];
+            questionCounterEl.textContent = `Question ${currentIndex + 1} of ${questionsData.length}`;
+            questionTextEl.textContent = q.question;
+
+            optionsContainerEl.innerHTML = '';
+            q.options.forEach((opt, index) => {
+                const isSelected = userAnswers[currentIndex] === index;
+                
+                const label = document.createElement('label');
+                label.className = `option-label ${isSelected ? 'selected' : ''}`;
+                
+                const input = document.createElement('input');
+                input.type = 'radio';
+                input.name = `question_${currentIndex}`;
+                input.value = index;
+                if (isSelected) input.checked = true;
+
+                input.addEventListener('change', () => {
+                    userAnswers[currentIndex] = index;
+                    renderQuestion(); // re-render to update selected styling
+                });
+
+                const customRadio = document.createElement('div');
+                customRadio.className = 'radio-custom';
+
+                const textSpan = document.createElement('span');
+                textSpan.textContent = opt;
+
+                label.appendChild(input);
+                label.appendChild(customRadio);
+                label.appendChild(textSpan);
+                optionsContainerEl.appendChild(label);
+            });
+
+            // Update buttons
+            btnPrev.disabled = currentIndex === 0;
+            
+            if (currentIndex === questionsData.length - 1) {
+                btnNext.innerHTML = 'Submit Exam <i class="fa-solid fa-check"></i>';
+            } else {
+                btnNext.innerHTML = 'Next <i class="fa-solid fa-arrow-right"></i>';
+            }
+        }
+
+        btnPrev.addEventListener('click', () => {
+            if (currentIndex > 0) {
+                currentIndex--;
+                renderQuestion();
+            }
+        });
+
+        btnNext.addEventListener('click', () => {
+            if (currentIndex < questionsData.length - 1) {
+                currentIndex++;
+                renderQuestion();
+            } else {
+                showResults();
+            }
+        });
+
+        function showResults() {
+            let score = 0;
+            questionsData.forEach((q, i) => {
+                if (userAnswers[i] === q.answer) {
+                    score++;
+                }
+            });
+
+            quizContainer.style.display = 'none';
+            resultScreen.style.display = 'block';
+            
+            finalScoreEl.textContent = `${score}/${questionsData.length}`;
+            
+            const percentage = (score / questionsData.length) * 100;
+            if (percentage === 100) {
+                scoreMessageEl.textContent = "Perfect! Excellent work.";
+            } else if (percentage >= 70) {
+                scoreMessageEl.textContent = "Great job! You have a solid understanding.";
+            } else {
+                scoreMessageEl.textContent = "Good effort. Keep studying to improve your score!";
+            }
+        }
+
+        // Initialize
+        renderQuestion();
+    </script>
+</body>
+</html>

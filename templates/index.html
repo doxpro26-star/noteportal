@@ -209,15 +209,31 @@
         .note-counter.active { background: var(--yellow-bg); border-color: var(--yellow-bdr); }
         .note-counter.active .count-num { color: var(--yellow-dk); }
 
-        /* Download button */
+        /* Action buttons */
+        .note-actions {
+            display: flex; gap: 10px; width: 100%;
+        }
+        .note-btn {
+            flex: 1;
+            display: flex; align-items: center; justify-content: center; gap: 6px;
+            font-weight: 700; font-size: 0.85rem;
+            padding: 11px 0; border-radius: 9px;
+            border: none; cursor: pointer;
+            transition: all 0.25s ease;
+        }
+        .note-view-btn {
+            background: var(--yellow-bg);
+            color: var(--yellow-dk);
+            border: 1.5px solid var(--yellow-bdr);
+        }
+        .note-view-btn:hover {
+            background: var(--yellow);
+            color: #111;
+            transform: translateY(-1px);
+        }
         .note-download-btn {
-            display: flex; align-items: center; justify-content: center; gap: 8px;
             background: var(--text);
             color: #fff;
-            font-weight: 700; font-size: 0.9rem;
-            padding: 11px 0; border-radius: 9px;
-            width: 100%; border: none; cursor: pointer;
-            transition: all 0.25s ease;
         }
         .note-download-btn:hover { background: var(--yellow); color: #111; transform: translateY(-1px); box-shadow: 0 6px 18px rgba(252,194,6,0.35); }
         .note-download-btn.clicked { background: #10B981; color: #fff; }
@@ -320,14 +336,22 @@
                             <span>download{{ 's' if note.downloads != 1 else '' }}</span>
                         </div>
 
-                        <!-- Download button -->
-                        <a href="{{ note.download_url }}"
-                           class="note-download-btn"
-                           download="{{ note.filename }}"
-                           onclick="handleDownload(this)">
-                            <i class="fa-solid fa-download"></i>
-                            Download
-                        </a>
+                        <!-- Actions -->
+                        <div class="note-actions">
+                            <a href="{{ note.view_url }}"
+                               class="note-btn note-view-btn"
+                               target="_blank">
+                                <i class="fa-solid fa-eye"></i>
+                                View
+                            </a>
+                            <a href="{{ note.download_url }}"
+                               class="note-btn note-download-btn"
+                               download="{{ note.filename }}"
+                               onclick="handleDownload(this)">
+                                <i class="fa-solid fa-download"></i>
+                                Download
+                            </a>
+                        </div>
                     </div>
                     {% endfor %}
                 {% else %}

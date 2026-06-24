@@ -1,0 +1,57 @@
+[
+  {
+    "id": 1,
+    "question": "What is the primary function of a multiplexer?",
+    "options": [
+      "To convert analog to digital",
+      "To select one of many inputs and output it",
+      "To amplify a signal",
+      "To store digital data"
+    ],
+    "answer": 1
+  },
+  {
+    "id": 2,
+    "question": "In an ideal operational amplifier, what is the input impedance?",
+    "options": [
+      "Zero",
+      "One",
+      "Infinity",
+      "100 Ohms"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 3,
+    "question": "Which continuous-wave modulation technique is most susceptible to noise?",
+    "options": [
+      "Frequency Modulation (FM)",
+      "Phase Modulation (PM)",
+      "Amplitude Modulation (AM)",
+      "Pulse Position Modulation (PPM)"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 4,
+    "question": "The time constant of a series RC circuit is given by:",
+    "options": [
+      "R / C",
+      "C / R",
+      "R * C",
+      "R + C"
+    ],
+    "answer": 2
+  },
+  {
+    "id": 5,
+    "question": "Which theorem states that any linear bilateral network can be replaced by an equivalent circuit consisting of a single voltage source and series resistance?",
+    "options": [
+      "Norton's Theorem",
+      "Thevenin's Theorem",
+      "Superposition Theorem",
+      "Maximum Power Transfer Theorem"
+    ],
+    "answer": 1
+  }
+]

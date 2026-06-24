@@ -85,6 +85,7 @@ def get_notes():
             "icon":     icon_map.get(ext.lower(), "fa-file"),
             "downloads": counts.get(filename, 111),
             "download_url": "/dl/" + quote(filename),
+            "view_url": "/view/" + quote(filename),
         })
 
     return notes
@@ -110,6 +111,29 @@ def download(filename):
     increment_count(safe_name)
 
     return send_from_directory(NOTES_FOLDER, safe_name, as_attachment=True)
+
+
+@app.route("/view/<path:filename>")
+def view(filename):
+    """Serve the file inline for viewing."""
+    safe_name = os.path.basename(filename)
+    file_path  = os.path.join(NOTES_FOLDER, safe_name)
+
+    if not os.path.isfile(file_path):
+        abort(404)
+
+    return send_from_directory(NOTES_FOLDER, safe_name, as_attachment=False)
+
+
+@app.route("/exam")
+def exam_portal():
+    mcqs_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data", "mcqs.json")
+    try:
+        with open(mcqs_path, "r", encoding="utf-8") as f:
+            mcqs = json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError):
+        mcqs = []
+    return render_template("exam.html", questions=mcqs)
 
 
 if __name__ == "__main__":
