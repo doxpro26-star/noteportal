@@ -284,10 +284,16 @@
                 All notes available in one click — no login, no signup.<br>
                 Scroll down to browse and download.
             </p>
-            <a href="#notes" class="hero-btn">
-                <i class="fa-solid fa-download"></i>
-                Browse Notes
-            </a>
+            <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
+                <a href="#notes" class="hero-btn">
+                    <i class="fa-solid fa-book"></i>
+                    Notes
+                </a>
+                <a href="#cheatsheets" class="hero-btn" style="background: var(--white); color: var(--text); border: 2px solid var(--yellow); box-shadow: none;">
+                    <i class="fa-solid fa-scroll"></i>
+                    Cheatsheets
+                </a>
+            </div>
         </div>
     </section>
 
@@ -353,6 +359,33 @@
                 {% endif %}
             </div>
 
+        </div>
+    </section>
+
+    <!-- CHEATSHEETS SECTION -->
+    <section class="notes-section" id="cheatsheets" style="background: #fff; border-top: 1px solid var(--border);">
+        <div class="container">
+            <div class="section-head">
+                <h2>Python <span>Cheatsheet</span></h2>
+                <p>Essential syntax and concepts for beginners</p>
+                <div class="divider"></div>
+            </div>
+
+            <div class="cheatsheet-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px;">
+                {% if cheatsheets_content %}
+                    {% for sheet in cheatsheets_content %}
+                    <div class="sheet-card" style="background: var(--bg); border: 1.5px solid var(--border); border-radius: var(--radius); overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
+                        <div style="background: #1A1A2E; color: #fff; padding: 14px 20px; font-weight: 700; font-size: 0.95rem; border-bottom: 2px solid var(--yellow); display: flex; align-items: center;">
+                            <i class="fa-brands fa-python" style="color: var(--yellow); margin-right: 10px; font-size: 1.1rem;"></i>
+                            {{ sheet.title }}
+                        </div>
+                        <div style="padding: 16px 20px;">
+                            <pre style="margin: 0; font-family: 'Consolas', 'Courier New', Courier, monospace; font-size: 0.85rem; color: #333; overflow-x: auto; line-height: 1.5;"><code>{{ sheet.code }}</code></pre>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
         </div>
     </section>
 
