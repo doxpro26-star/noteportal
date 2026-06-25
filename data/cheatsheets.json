@@ -1,0 +1,122 @@
+[
+  {
+    "title": "1. Variables & Basic Types",
+    "code": "# Integer, Float, String, Boolean\nx = 10\ny = 3.14\nname = \"Python\"\nis_active = True\n\n# Type conversion\nstr_x = str(x)\nint_y = int(y)"
+  },
+  {
+    "title": "2. Math Operations",
+    "code": "a = 10\nb = 3\n\nadd = a + b      # 13\nsub = a - b      # 7\nmul = a * b      # 30\ndiv = a / b      # 3.333...\nflor = a // b    # 3 (Floor division)\nmod = a % b      # 1 (Modulo)\nexp = a ** b     # 1000 (Exponentiation)"
+  },
+  {
+    "title": "3. Strings & Formatting",
+    "code": "name = \"Alice\"\nage = 25\n\n# f-Strings (Python 3.6+)\nmsg = f\"{name} is {age} years old.\"\n\n# String Methods\n\"hello\".capitalize() # 'Hello'\n\"hello\".upper()      # 'HELLO'\n\"  hello  \".strip()   # 'hello'\n\"a,b,c\".split(\",\")   # ['a', 'b', 'c']\n\"-\".join(['a', 'b']) # 'a-b'"
+  },
+  {
+    "title": "4. Lists (Mutable)",
+    "code": "nums = [1, 2, 3]\n\nnums.append(4)       # [1, 2, 3, 4]\nnums.insert(0, 0)    # [0, 1, 2, 3, 4]\nnums.pop()           # Removes last item\nnums.remove(2)       # Removes first '2'\nnums.sort()          # Sorts in-place\n\n# Slicing\nnums[1:3]            # Get items from idx 1 to 2\nnums[::-1]           # Reverse list"
+  },
+  {
+    "title": "5. Tuples (Immutable)",
+    "code": "coords = (10, 20)\n\n# Accessing elements\nx = coords[0]\n\n# Unpacking\nx, y = coords\n\n# Note: coords[0] = 15 will throw an error!\n# Tuples cannot be modified after creation."
+  },
+  {
+    "title": "6. Dictionaries",
+    "code": "user = {\"name\": \"Alice\", \"age\": 25}\n\nuser[\"city\"] = \"NY\"   # Add/Update\nuser.get(\"job\", \"NA\") # Safe access (returns 'NA' if not found)\n\n# Looping\nfor key, val in user.items():\n    print(f\"{key}: {val}\")\n\nuser.keys()   # dict_keys(['name', 'age'])\nuser.values() # dict_values(['Alice', 25])"
+  },
+  {
+    "title": "7. Sets (Unique)",
+    "code": "nums = {1, 2, 2, 3}\nprint(nums)  # {1, 2, 3}\n\nnums.add(4)\nnums.remove(1)\n\n# Set Operations\na = {1, 2, 3}\nb = {3, 4, 5}\n\na | b  # Union: {1, 2, 3, 4, 5}\na & b  # Intersection: {3}\na - b  # Difference: {1, 2}"
+  },
+  {
+    "title": "8. Conditionals",
+    "code": "age = 18\n\nif age < 18:\n    print(\"Minor\")\nelif age == 18:\n    print(\"Exactly 18\")\nelse:\n    print(\"Adult\")\n\n# Ternary Operator\nstatus = \"Adult\" if age >= 18 else \"Minor\"\n\n# Truthy/Falsy: 0, \"\", [], {}, None are Falsy"
+  },
+  {
+    "title": "9. Loops",
+    "code": "# For Loop\nfor i in range(3):\n    print(i)  # 0, 1, 2\n\n# While Loop\ncount = 0\nwhile count < 3:\n    count += 1\n\n# Loop Control\nfor i in range(5):\n    if i == 2: continue # Skips 2\n    if i == 4: break    # Stops loop\n\n# Enumerate\nfor idx, val in enumerate([\"A\", \"B\"]):\n    print(idx, val)"
+  },
+  {
+    "title": "10. Functions",
+    "code": "def greet(name, msg=\"Hello\"):\n    return f\"{msg}, {name}!\"\n\nprint(greet(\"Alice\"))\n\n# Type Hinting (Python 3.5+)\ndef add(x: int, y: int) -> int:\n    return x + y\n\n# Docstrings\ndef func():\n    \"\"\"This is a docstring describing the function.\"\"\"\n    pass"
+  },
+  {
+    "title": "11. *args & **kwargs",
+    "code": "# *args for variable positional arguments\ndef my_sum(*args):\n    return sum(args)\n\nprint(my_sum(1, 2, 3)) # 6\n\n# **kwargs for variable keyword arguments\ndef print_info(**kwargs):\n    for key, value in kwargs.items():\n        print(f\"{key}: {value}\")\n\nprint_info(name=\"Alice\", age=25)"
+  },
+  {
+    "title": "12. Lambda Functions",
+    "code": "# Anonymous functions (single expression)\nadd = lambda x, y: x + y\nprint(add(5, 3)) # 8\n\n# Often used with map/filter/sorted\nnums = [1, 2, 3, 4]\nsquares = list(map(lambda x: x**2, nums))\nevens = list(filter(lambda x: x % 2 == 0, nums))\n\n# Sorting by specific key\nusers = [{\"name\": \"Bob\", \"age\": 30}, {\"name\": \"Alice\", \"age\": 25}]\nusers.sort(key=lambda u: u[\"age\"])"
+  },
+  {
+    "title": "13. Comprehensions",
+    "code": "# List Comprehension\nsquares = [x**2 for x in range(5)]\n# [0, 1, 4, 9, 16]\n\n# With condition\nevens = [x for x in range(10) if x % 2 == 0]\n\n# Dictionary Comprehension\nsquare_dict = {x: x**2 for x in range(3)}\n# {0: 0, 1: 1, 2: 4}\n\n# Set Comprehension\nchar_set = {char for char in \"hello\"}\n# {'h', 'e', 'l', 'o'}"
+  },
+  {
+    "title": "14. Classes & OOP",
+    "code": "class Dog:\n    # Class Attribute\n    species = \"Canis familiaris\"\n\n    # Constructor\n    def __init__(self, name, age):\n        self.name = name  # Instance Attribute\n        self.age = age\n        \n    # Instance Method\n    def bark(self):\n        return f\"{self.name} says Woof!\"\n\nmy_dog = Dog(\"Rex\", 3)\nprint(my_dog.bark())"
+  },
+  {
+    "title": "15. Inheritance & Magic Methods",
+    "code": "class Animal:\n    def speak(self):\n        pass\n\nclass Cat(Animal): # Inherits from Animal\n    def speak(self):\n        return \"Meow!\"\n\nclass Book:\n    def __init__(self, title):\n        self.title = title\n        \n    # Magic string representation method\n    def __str__(self):\n        return f\"Book: {self.title}\"\n\nb = Book(\"1984\")\nprint(b) # Output: Book: 1984"
+  },
+  {
+    "title": "16. Exception Handling",
+    "code": "try:\n    result = 10 / 0\nexcept ZeroDivisionError:\n    print(\"Cannot divide by zero!\")\nexcept Exception as e:\n    print(f\"An error occurred: {e}\")\nelse:\n    print(\"Runs only if no exception occurred!\")\nfinally:\n    print(\"Always runs (cleanup code)\")\n\n# Raising exceptions\nif age < 0:\n    raise ValueError(\"Age cannot be negative\")"
+  },
+  {
+    "title": "17. File Handling",
+    "code": "# Context Managers (with statement) automatically close files\n\n# Writing to a file\nwith open(\"data.txt\", \"w\") as f:\n    f.write(\"Hello Python\")\n\n# Reading from a file\nwith open(\"data.txt\", \"r\") as f:\n    content = f.read()\n    \n# Reading line by line\nwith open(\"data.txt\", \"r\") as f:\n    for line in f:\n        print(line.strip())"
+  },
+  {
+    "title": "18. Scope & Global",
+    "code": "x = 10 # Global scope\n\ndef modify():\n    global x\n    x = 20 # Modifies the global x\n    \ndef outer():\n    y = 5\n    def inner():\n        nonlocal y\n        y = 10 # Modifies outer's y\n    inner()\n    print(y) # 10"
+  },
+  {
+    "title": "19. Iterators & Generators",
+    "code": "# Generator function uses 'yield' instead of 'return'\ndef count_up_to(max_val):\n    count = 1\n    while count <= max_val:\n        yield count\n        count += 1\n\ncounter = count_up_to(3)\nprint(next(counter)) # 1\nprint(next(counter)) # 2\n\n# Memory efficient for large datasets\nfor num in count_up_to(1000000):\n    pass"
+  },
+  {
+    "title": "20. Decorators",
+    "code": "def my_decorator(func):\n    def wrapper():\n        print(\"Before function call.\")\n        func()\n        print(\"After function call.\")\n    return wrapper\n\n@my_decorator\ndef say_hello():\n    print(\"Hello!\")\n\nsay_hello()\n# Output:\n# Before function call.\n# Hello!\n# After function call."
+  },
+  {
+    "title": "21. Modules & Imports",
+    "code": "# Import entire module\nimport math\nprint(math.pi)\n\n# Import specific functions\nfrom datetime import datetime\nprint(datetime.now())\n\n# Alias\nimport numpy as np\n\n# Custom Modules\n# If you have 'utils.py', you can do:\n# import utils\n# utils.my_function()"
+  },
+  {
+    "title": "22. JSON Handling",
+    "code": "import json\n\ndata = {\"name\": \"Alice\", \"age\": 25}\n\n# Dictionary to JSON String\njson_str = json.dumps(data)\n\n# JSON String to Dictionary\nparsed_data = json.loads(json_str)\n\n# Write JSON to file\nwith open('data.json', 'w') as f:\n    json.dump(data, f)\n    \n# Read JSON from file\nwith open('data.json', 'r') as f:\n    loaded = json.load(f)"
+  },
+  {
+    "title": "23. Collections Module",
+    "code": "from collections import Counter, defaultdict\n\n# Counter (Count occurrences)\ncounts = Counter(['a', 'b', 'a', 'c', 'b', 'a'])\nprint(counts) # Counter({'a': 3, 'b': 2, 'c': 1})\n\n# DefaultDict (Avoid KeyError)\nd = defaultdict(int) # Default value is 0\nd['missing_key'] += 1\nprint(d['missing_key']) # 1"
+  },
+  {
+    "title": "24. Regular Expressions (re)",
+    "code": "import re\n\ntext = \"Contact me at alice@email.com or bob@email.com\"\n\n# Find all matches\nemails = re.findall(r'\\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}\\b', text)\nprint(emails)\n\n# Substitution\nredacted = re.sub(r'\\d{4}-\\d{4}', 'XXXX-XXXX', \"Card: 1234-5678\")"
+  },
+  {
+    "title": "25. Datetime Module",
+    "code": "from datetime import datetime, timedelta\n\nnow = datetime.now()\nprint(now.strftime(\"%Y-%m-%d %H:%M:%S\"))\n\n# Parse string to datetime\ndt = datetime.strptime(\"2023-01-01\", \"%Y-%m-%d\")\n\n# Time math\ntomorrow = now + timedelta(days=1)\nnext_week = now + timedelta(weeks=1)"
+  },
+  {
+    "title": "26. Type Hinting",
+    "code": "from typing import List, Dict, Optional\n\ndef process_items(items: List[str]) -> Dict[str, int]:\n    return {item: len(item) for item in items}\n\n# Optional: Can be string or None\ndef greet(name: Optional[str] = None) -> str:\n    if name:\n        return f\"Hello {name}\"\n    return \"Hello stranger\""
+  },
+  {
+    "title": "27. Python Virtual Environments",
+    "code": "# Terminal / Command Line\n\n# Create a virtual environment\npython -m venv venv\n\n# Activate (Windows)\nvenv\\Scripts\\activate\n\n# Activate (Mac/Linux)\nsource venv/bin/activate\n\n# Deactivate\ndeactivate"
+  },
+  {
+    "title": "28. Pip & Dependencies",
+    "code": "# Terminal / Command Line\n\n# Install a package\npip install requests\n\n# Install specific version\npip install Flask==2.0.1\n\n# Save dependencies to file\npip freeze > requirements.txt\n\n# Install from requirements file\npip install -r requirements.txt"
+  },
+  {
+    "title": "29. Asyncio (Basics)",
+    "code": "import asyncio\n\nasync def fetch_data():\n    print(\"Fetching...\")\n    await asyncio.sleep(2) # Simulate I/O bound wait\n    return {\"data\": 123}\n\nasync def main():\n    # Run fetch_data\n    result = await fetch_data()\n    print(result)\n\n# To run the async function\nif __name__ == \"__main__\":\n    asyncio.run(main())"
+  },
+  {
+    "title": "30. Making API Requests",
+    "code": "import requests\n\n# GET Request\nresponse = requests.get(\"https://api.github.com\")\nif response.status_code == 200:\n    data = response.json()\n    print(data)\n\n# POST Request\npayload = {\"key\": \"value\"}\nres = requests.post(\"https://httpbin.org/post\", json=payload)\nprint(res.json())"
+  }
+]

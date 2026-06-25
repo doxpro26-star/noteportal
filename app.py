@@ -95,64 +95,12 @@ def get_notes():
 
 @app.route("/")
 def index():
-    cheatsheets_content = [
-        {
-            "title": "1. Variables & Basic Types",
-            "code": "# Integer, Float, String, Boolean\nx = 10\ny = 3.14\nname = \"Python\"\nis_active = True\n\n# Type conversion\nstr_x = str(x)\nint_y = int(y)"
-        },
-        {
-            "title": "2. Strings",
-            "code": "text = \"Hello World\"\n\n# Slicing\ntext[0]       # 'H'\ntext[0:5]     # 'Hello'\n\n# Methods\ntext.lower()  # 'hello world'\ntext.upper()  # 'HELLO WORLD'\ntext.split()  # ['Hello', 'World']\ntext.replace(\"World\", \"Python\")"
-        },
-        {
-            "title": "3. Lists (Mutable)",
-            "code": "nums = [1, 2, 3]\n\nnums.append(4)       # [1, 2, 3, 4]\nnums.insert(0, 0)    # [0, 1, 2, 3, 4]\nnums.pop()           # Removes last item\nnums[0] = 10         # Update item\n\n# List comprehension\nsquares = [x**2 for x in nums]"
-        },
-        {
-            "title": "4. Dictionaries",
-            "code": "user = {\"name\": \"Alice\", \"age\": 25}\n\n# Access & Update\nuser[\"name\"]          # 'Alice'\nuser[\"age\"] = 26      # Update\nuser[\"city\"] = \"NY\"   # Add new key\n\n# Methods\nuser.keys()\nuser.values()\nuser.items()"
-        },
-        {
-            "title": "5. Conditionals",
-            "code": "age = 18\n\nif age < 18:\n    print(\"Minor\")\nelif age == 18:\n    print(\"Exactly 18\")\nelse:\n    print(\"Adult\")\n\n# Ternary operator\nstatus = \"Adult\" if age >= 18 else \"Minor\""
-        },
-        {
-            "title": "6. Loops",
-            "code": "# For Loop\nfor i in range(3):\n    print(i)  # 0, 1, 2\n\n# Iterating over list\nfor item in [\"a\", \"b\"]:\n    print(item)\n\n# While Loop\ncount = 0\nwhile count < 3:\n    count += 1"
-        },
-        {
-            "title": "7. Functions",
-            "code": "def greet(name, msg=\"Hello\"):\n    return f\"{msg}, {name}!\"\n\nprint(greet(\"Alice\"))\n# Output: Hello, Alice!\n\n# Lambda functions\nadd = lambda x, y: x + y\nprint(add(5, 3)) # Output: 8"
-        },
-        {
-            "title": "8. Classes (OOP)",
-            "code": "class Dog:\n    def __init__(self, name):\n        self.name = name\n        \n    def bark(self):\n        return f\"{self.name} says Woof!\"\n\nmy_dog = Dog(\"Rex\")\nprint(my_dog.bark())"
-        },
-        {
-            "title": "9. Exception Handling",
-            "code": "try:\n    result = 10 / 0\nexcept ZeroDivisionError:\n    print(\"Cannot divide by zero!\")\nexcept Exception as e:\n    print(f\"Error: {e}\")\nfinally:\n    print(\"Cleanup code here\")"
-        },
-        {
-            "title": "10. File Handling",
-            "code": "# Writing to a file\nwith open(\"data.txt\", \"w\") as f:\n    f.write(\"Hello Python\")\n\n# Reading from a file\nwith open(\"data.txt\", \"r\") as f:\n    content = f.read()\n    print(content)"
-        },
-        {
-            "title": "11. Tuples (Immutable)",
-            "code": "coords = (10, 20)\n\n# Accessing elements\nx = coords[0]\n\n# Unpacking\nx, y = coords\n\n# Note: coords[0] = 15 will throw an error!"
-        },
-        {
-            "title": "12. Sets (Unique)",
-            "code": "nums = {1, 2, 2, 3}\nprint(nums)  # Output: {1, 2, 3}\n\n# Adding/Removing\nnums.add(4)\nnums.remove(1)\n\n# Set operations\na = {1, 2}\nb = {2, 3}\na | b  # Union: {1, 2, 3}\na & b  # Intersection: {2}"
-        },
-        {
-            "title": "13. Modules & Imports",
-            "code": "# Import entire module\nimport math\nprint(math.pi)\n\n# Import specific functions\nfrom datetime import datetime\nprint(datetime.now())\n\n# Alias\nimport numpy as np"
-        },
-        {
-            "title": "14. *args & **kwargs",
-            "code": "def my_func(*args, **kwargs):\n    for arg in args:\n        print(\"Positional:\", arg)\n    for k, v in kwargs.items():\n        print(f\"Keyword: {k}={v}\")\n\nmy_func(1, 2, name=\"Alice\", age=25)"
-        }
-    ]
+    cheatsheets_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data", "cheatsheets.json")
+    try:
+        with open(cheatsheets_path, "r", encoding="utf-8") as f:
+            cheatsheets_content = json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError):
+        cheatsheets_content = []
     return render_template("index.html", notes=get_notes(), cheatsheets_content=cheatsheets_content)
 
 
