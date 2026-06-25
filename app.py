@@ -135,6 +135,22 @@ def index():
         {
             "title": "10. File Handling",
             "code": "# Writing to a file\nwith open(\"data.txt\", \"w\") as f:\n    f.write(\"Hello Python\")\n\n# Reading from a file\nwith open(\"data.txt\", \"r\") as f:\n    content = f.read()\n    print(content)"
+        },
+        {
+            "title": "11. Tuples (Immutable)",
+            "code": "coords = (10, 20)\n\n# Accessing elements\nx = coords[0]\n\n# Unpacking\nx, y = coords\n\n# Note: coords[0] = 15 will throw an error!"
+        },
+        {
+            "title": "12. Sets (Unique)",
+            "code": "nums = {1, 2, 2, 3}\nprint(nums)  # Output: {1, 2, 3}\n\n# Adding/Removing\nnums.add(4)\nnums.remove(1)\n\n# Set operations\na = {1, 2}\nb = {2, 3}\na | b  # Union: {1, 2, 3}\na & b  # Intersection: {2}"
+        },
+        {
+            "title": "13. Modules & Imports",
+            "code": "# Import entire module\nimport math\nprint(math.pi)\n\n# Import specific functions\nfrom datetime import datetime\nprint(datetime.now())\n\n# Alias\nimport numpy as np"
+        },
+        {
+            "title": "14. *args & **kwargs",
+            "code": "def my_func(*args, **kwargs):\n    for arg in args:\n        print(\"Positional:\", arg)\n    for k, v in kwargs.items():\n        print(f\"Keyword: {k}={v}\")\n\nmy_func(1, 2, name=\"Alice\", age=25)"
         }
     ]
     return render_template("index.html", notes=get_notes(), cheatsheets_content=cheatsheets_content)
