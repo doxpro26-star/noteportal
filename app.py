@@ -146,6 +146,35 @@ def exam_portal():
     return render_template("exam.html", questions=mcqs)
 
 
+@app.route("/tutorial")
+@app.route("/tutorial/<int:topic_id>")
+def tutorial(topic_id=0):
+    cheatsheets_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data", "cheatsheets.json")
+    try:
+        with open(cheatsheets_path, "r", encoding="utf-8") as f:
+            topics = json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError):
+        topics = []
+        
+    if not topics:
+        return "No tutorial data found.", 404
+
+    # Ensure topic_id is within bounds
+    if topic_id < 0 or topic_id >= len(topics):
+        topic_id = 0
+
+    current_topic = topics[topic_id]
+    prev_id = topic_id - 1 if topic_id > 0 else None
+    next_id = topic_id + 1 if topic_id < len(topics) - 1 else None
+
+    return render_template("tutorial.html", 
+                           topics=topics, 
+                           current_topic=current_topic, 
+                           topic_id=topic_id, 
+                           prev_id=prev_id, 
+                           next_id=next_id)
+
+
 if __name__ == "__main__":
     os.makedirs(NOTES_FOLDER, exist_ok=True)
     app.run(debug=True, port=5000)
